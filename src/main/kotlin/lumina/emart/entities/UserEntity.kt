@@ -7,7 +7,7 @@ import java.util.UUID
 
 
 @Document(collection = "users")
-class UserEntity(
+data class UserEntity(
     @Id
     val id:String = UUID.randomUUID().toString(),
     var name:String,
