@@ -9,6 +9,7 @@ import lumina.emart.utils.FetchParams
 import lumina.emart.utils.fetchData
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
+import java.util.Date
 
 @Service
 class ProductService(
@@ -28,16 +29,14 @@ class ProductService(
             supplier = createProductDto.supplier,
             taxRate = createProductDto.taxRate,
             cessRate = createProductDto.cessRate,
-            customDuty = createProductDto.customDuty,
-            supplierName = createProductDto.supplierName,
-            supplierContact = createProductDto.supplierContact
+            customDuty = createProductDto.customDuty
         )
         productRepository.save(product)
         return Response("Product created successfully", product)
     }
 
-    fun updateProduct(updateProductDto: UpdateProductDto): Response {
-        val product = productRepository.findById(updateProductDto.id).orElse(null)
+    fun updateProduct(id: String, updateProductDto: UpdateProductDto): Response {
+        val product = productRepository.findById(id).orElse(null)
             ?: return Response("Product not found", null)
 
         updateProductDto.name?.let { product.name = it }
@@ -52,8 +51,7 @@ class ProductService(
         updateProductDto.taxRate?.let { product.taxRate = it }
         updateProductDto.cessRate?.let { product.cessRate = it }
         updateProductDto.customDuty?.let { product.customDuty = it }
-        updateProductDto.supplierName?.let { product.supplierName = it }
-        updateProductDto.supplierContact?.let { product.supplierContact = it }
+        product.updatedAt = Date()
 
         productRepository.save(product)
         return Response("Product updated successfully", product)

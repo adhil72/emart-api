@@ -20,8 +20,6 @@ data class ProductEntity(
     var taxRate: Double? = null,
     var cessRate: Double? = null,
     var customDuty: Double? = null,
-    var supplierName: String? = null,
-    var supplierContact: String? = null,
-    var createdAt: String = java.time.LocalDateTime.now().toString(),
-    var updatedAt: String = java.time.LocalDateTime.now().toString()
+    var createdAt: Date = Date(),
+    var updatedAt: Date = Date()
 )
