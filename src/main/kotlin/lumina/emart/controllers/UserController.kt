@@ -2,6 +2,7 @@ package lumina.emart.controllers
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import lumina.emart.dtos.SignInDto
 import lumina.emart.dtos.SignUpDto
 import lumina.emart.services.UserService
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,4 +24,7 @@ class UserController(private val userService: UserService) {
         httpServletResponse.status = HttpServletResponse.SC_FOUND
         httpServletResponse.setHeader("Location", callbackUrl)
     }
+
+    @PostMapping("/signin")
+    fun signIn(@RequestBody signInDto: SignInDto) = userService.signIn(signInDto)
 }

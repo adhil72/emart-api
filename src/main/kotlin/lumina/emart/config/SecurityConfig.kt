@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -19,9 +20,9 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
             it
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/user/**").permitAll()
-                .requestMatchers("/admin/**").hasRole(Roles.ADMIN)
-                .requestMatchers("/cashier/**").hasRole(Roles.CASHIER)
-                .requestMatchers("/manager/**").hasRole(Roles.MANAGER)
+                .requestMatchers("/admin/**").hasAuthority(Roles.ADMIN)
+                .requestMatchers("/cashier/**").hasAuthority(Roles.CASHIER)
+                .requestMatchers("/manager/**").hasAuthority(Roles.MANAGER)
                 .anyRequest().denyAll()
         }.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter::class.java)
         return http.build()

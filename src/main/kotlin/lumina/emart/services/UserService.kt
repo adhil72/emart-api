@@ -2,6 +2,7 @@ package lumina.emart.services
 
 import lumina.emart.dtos.JwtObject
 import lumina.emart.dtos.Response
+import lumina.emart.dtos.SignInDto
 import lumina.emart.dtos.SignUpDto
 import lumina.emart.entities.TokenEntity
 import lumina.emart.entities.UserEntity
@@ -14,6 +15,7 @@ import lumina.emart.templates.welcomeUserTemplate
 import lumina.emart.utils.JwtUtil
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestBody
 import java.util.Date
 
 @Service
@@ -61,5 +63,15 @@ class UserService(
         userRepository.save(user)
         tokenRepository.delete(tokenEntity)
         return true
+    }
+
+    fun signIn(@RequestBody signInDto: SignInDto):Response{
+        val user = userRepository.findByEmail(signInDto.email) ?: throw ExpectedException("User not found", 400)
+        if (!passwordEncoder.matches(signInDto.password, user.password)) throw ExpectedException("Invalid password", 400)
+        val token = jwtUtil.generateToken(JwtObject(user.id, user.role))
+        return Response(
+            message = "User logged in successfully",
+            data = mapOf("token" to token)
+        )
     }
 }

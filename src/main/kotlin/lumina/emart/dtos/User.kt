@@ -5,3 +5,8 @@ data class SignUpDto(
     val email:String,
     val password:String,
 )
+
+data class SignInDto(
+    val email:String,
+    val password:String,
+)
