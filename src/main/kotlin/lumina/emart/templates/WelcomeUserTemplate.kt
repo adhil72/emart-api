@@ -1,6 +1,6 @@
 package lumina.emart.templates
 
-fun welcomeUserTemplate(name: String, email: String, password: String): String {
+fun welcomeUserTemplate(name: String, email: String, verificationUrl:String): String {
     return """
         <!DOCTYPE html>
         <html lang="en">
@@ -55,12 +55,10 @@ fun welcomeUserTemplate(name: String, email: String, password: String): String {
                 <p>We are excited to have you on board. Here are your account details:</p>
                 <ul>
                     <li><strong>Email:</strong> <span class="highlight">$email</span></li>
-                    <li><strong>Password:</strong> <span class="highlight">$password</span></li>
                 </ul>
-                <p><strong>Important:</strong> Please change your password after your first login.</p>
-                <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
-                <p>Happy shopping!</p>
-                <p>Best regards,<br/>The Emart Team</p>
+                <p>Click the link below to verify your email address and complete your registration:</p>
+                <a href="$verificationUrl">$verificationUrl</a>
+                <p>If you have any questions, feel free to reply to this email.</p>
             </div>
             <div class="footer">
                 &copy; 2023 Emart. All rights reserved.

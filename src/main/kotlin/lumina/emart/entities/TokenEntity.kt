@@ -7,6 +7,6 @@ import java.util.UUID
 @Document(collection = "tokens")
 data class TokenEntity(
     val id: String = UUID.randomUUID().toString(),
-    val email: String,
+    val uid: String,
     val expiryDate: Date = Date(System.currentTimeMillis() + 1000 * 60 * 5)
 )

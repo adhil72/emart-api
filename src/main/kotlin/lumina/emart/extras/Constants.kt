@@ -5,3 +5,7 @@ object Roles {
     val CASHIER = "cashier"
     val MANAGER = "manager"
 }
+
+object Config{
+    val BASE_URL = "http://localhost:3000"
+}
