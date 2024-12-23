@@ -2,6 +2,7 @@ package lumina.emart.entities
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import java.util.Date
 import java.util.UUID
 
 @Document(collection = "suppliers")
@@ -13,6 +14,6 @@ data class SupplierEntity(
     var address: String? = null,
     var email: String? = null,
     var phone: String? = null,
-    var createdAt: String = java.time.LocalDateTime.now().toString(),
-    var updatedAt: String = java.time.LocalDateTime.now().toString()
+    var createdAt: Date = Date(),
+    var updatedAt: Date = Date()
 )

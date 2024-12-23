@@ -9,6 +9,7 @@ import lumina.emart.utils.FetchParams
 import lumina.emart.utils.fetchData
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
+import java.util.Date
 
 @Service
 class SupplierService(
@@ -41,7 +42,7 @@ class SupplierService(
         updateSupplierDto.address?.let { supplier.address = it }
         updateSupplierDto.email?.let { supplier.email = it }
         updateSupplierDto.phone?.let { supplier.phone = it }
-
+        supplier.updatedAt = Date()
         supplierRepository.save(supplier)
         return Response("Supplier updated successfully", supplier)
     }
