@@ -56,7 +56,7 @@ class UserService(
     fun verifyEmail(token: String): Boolean {
         val tokenEntity = tokenRepository.findById(token).orElseThrow { ExpectedException("Invalid token", 400) }
         if (tokenEntity.expiryDate.before(Date())) throw ExpectedException("Token expired", 400)
-        val user = userRepository.findByEmail(tokenEntity.uid) ?: throw ExpectedException("User not found", 400)
+        val user = userRepository.findById(tokenEntity.uid).get()
         user.verified = true
         userRepository.save(user)
         tokenRepository.delete(tokenEntity)

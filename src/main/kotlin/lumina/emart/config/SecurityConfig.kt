@@ -18,7 +18,7 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
         http.csrf{it.disable()}.authorizeHttpRequests {
             it
                 .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/user/**").permitAll()
                 .requestMatchers("/admin/**").hasRole(Roles.ADMIN)
                 .requestMatchers("/cashier/**").hasRole(Roles.CASHIER)
                 .requestMatchers("/manager/**").hasRole(Roles.MANAGER)
