@@ -9,6 +9,7 @@ import lumina.emart.utils.FetchParams
 import lumina.emart.utils.fetchData
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CategoryService(
@@ -21,17 +22,18 @@ class CategoryService(
             name = createCategoryDto.name
         )
         categoryRepository.save(category)
-        return Response("Category created successfully", null)
+        return Response("Category created successfully", category)
     }
 
-    fun updateCategory(updateCategoryDto: UpdateCategoryDto): Response {
-        val category = categoryRepository.findById(updateCategoryDto.id).orElse(null) ?: return Response(
+    fun updateCategory(id:String, updateCategoryDto: UpdateCategoryDto): Response {
+        val category = categoryRepository.findById(id).orElse(null) ?: return Response(
             "Category not found",
             null
         )
         updateCategoryDto.name?.let { category.name = it }
+        category.updatedAt = Date()
         categoryRepository.save(category)
-        return Response("Category updated successfully", null)
+        return Response("Category updated successfully", category)
     }
 
     fun deleteCategory(id: String): Response {

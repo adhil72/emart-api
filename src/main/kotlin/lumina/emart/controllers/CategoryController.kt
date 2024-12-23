@@ -14,11 +14,11 @@ class CategoryController(private val categoryService: CategoryService) {
     @PostMapping("/create")
     fun addCategory(@RequestBody createCategoryDto: CreateCategoryDto) = categoryService.createCategory(createCategoryDto)
 
-    @PatchMapping("/update")
-    fun updateCategory(@RequestBody updateCategoryDto: UpdateCategoryDto) = categoryService.updateCategory(updateCategoryDto)
+    @PutMapping("/update/{id}")
+    fun updateCategory(@PathVariable id: String,@RequestBody updateCategoryDto: UpdateCategoryDto) = categoryService.updateCategory(id, updateCategoryDto)
 
-    @DeleteMapping("/delete")
-    fun deleteCategory(id: String) = categoryService.deleteCategory(id)
+    @DeleteMapping("/delete/{id}")
+    fun deleteCategory(@PathVariable id: String) = categoryService.deleteCategory(id)
 
     @GetMapping("/fetch")
     fun fetchCategories(@ModelAttribute fetchParams: FetchParams) = categoryService.fetchCategories(fetchParams)

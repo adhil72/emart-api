@@ -5,6 +5,5 @@ data class CreateCategoryDto(
 )
 
 data class UpdateCategoryDto(
-    val id: String,
     val name: String?=null
 )
