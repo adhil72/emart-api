@@ -4,12 +4,15 @@ import lumina.emart.dtos.CreateProductDto
 import lumina.emart.dtos.Response
 import lumina.emart.dtos.UpdateProductDto
 import lumina.emart.services.ProductService
+import lumina.emart.utils.FetchParams
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.naming.ldap.SortKey
+import javax.swing.SortOrder
 
 @RestController
 @RequestMapping("/products")
@@ -25,5 +28,5 @@ class ProductController(private val productService: ProductService){
     fun deleteProduct(id: String):Response = productService.deleteProduct(id)
 
     @PostMapping("/fetch")
-    fun fetchProducts(page:Int = 1, limit: Int = 10):Response = productService.fetchProducts(page, limit)
+    fun fetchProducts(fetchParams: FetchParams):Response = productService.fetchProducts(fetchParams)
 }

@@ -5,13 +5,16 @@ import lumina.emart.dtos.Response
 import lumina.emart.dtos.UpdateCategoryDto
 import lumina.emart.entities.CategoryEntity
 import lumina.emart.repositories.CategoryRepository
-import lumina.emart.utils.fetchRepo
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
+import lumina.emart.utils.FetchParams
+import lumina.emart.utils.fetchData
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
 
 @Service
-class CategoryService(private val categoryRepository: CategoryRepository) {
+class CategoryService(
+    private val categoryRepository: CategoryRepository,
+    private val mongoTemplate: MongoTemplate
+    ) {
 
     fun createCategory(createCategoryDto: CreateCategoryDto): Response {
         val category = CategoryEntity(
@@ -36,10 +39,8 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
         return Response("Category deleted successfully", null)
     }
 
-    fun fetchCategories(page: Int, limit: Int, sortKey: String? = null, sortDirection: String="desc"): Response {
-        val data = fetchRepo(categoryRepository, page, limit, sortKey, sortDirection)
+    fun fetchCategories(fetchParams: FetchParams): Response {
+        val data = fetchData(categoryRepository,mongoTemplate,fetchParams,CategoryEntity::class.java)
         return Response("Categories fetched successfully", data)
     }
-
-
 }

@@ -5,41 +5,70 @@ import lumina.emart.dtos.Response
 import lumina.emart.dtos.UpdateProductDto
 import lumina.emart.entities.ProductEntity
 import lumina.emart.repositories.ProductRepository
-import org.springframework.data.domain.Pageable
+import lumina.emart.utils.FetchParams
+import lumina.emart.utils.fetchData
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Service
 
 @Service
 class ProductService(
-    private val productRepository: ProductRepository
-){
-    fun createProduct(createProductDto: CreateProductDto):Response{
+    private val productRepository: ProductRepository,
+    private val mongoTemplate: MongoTemplate
+) {
+    fun createProduct(createProductDto: CreateProductDto): Response {
         val product = ProductEntity(
             name = createProductDto.name,
             category = createProductDto.category,
-            price = createProductDto.price,
-            stockQuantity = createProductDto.stockQuantity
+            unitPrice = createProductDto.unitPrice,
+            costPrice = createProductDto.costPrice ?: 0.0,
+            stockQuantity = createProductDto.stockQuantity,
+            reorderLevel = createProductDto.reorderLevel,
+            expiryDate = createProductDto.expiryDate,
+            tags = createProductDto.tags,
+            supplier = createProductDto.supplier,
+            taxRate = createProductDto.taxRate,
+            cessRate = createProductDto.cessRate,
+            customDuty = createProductDto.customDuty,
+            supplierName = createProductDto.supplierName,
+            supplierContact = createProductDto.supplierContact
         )
         productRepository.save(product)
-        return Response("Product created successfully", null)
+        return Response("Product created successfully", product)
     }
 
-    fun updateProduct(updateProductDto: UpdateProductDto):Response{
-        val product = productRepository.findById(updateProductDto.id).orElse(null) ?: return Response("Product not found", null)
+    fun updateProduct(updateProductDto: UpdateProductDto): Response {
+        val product = productRepository.findById(updateProductDto.id).orElse(null)
+            ?: return Response("Product not found", null)
+
         updateProductDto.name?.let { product.name = it }
         updateProductDto.category?.let { product.category = it }
-        updateProductDto.price?.let { product.price = it }
+        updateProductDto.unitPrice?.let { product.unitPrice = it }
+        updateProductDto.costPrice?.let { product.costPrice = it }
         updateProductDto.stockQuantity?.let { product.stockQuantity = it }
+        updateProductDto.reorderLevel?.let { product.reorderLevel = it }
+        updateProductDto.expiryDate?.let { product.expiryDate = it }
+        updateProductDto.tags?.let { product.tags = it }
+        updateProductDto.supplier?.let { product.supplier = it }
+        updateProductDto.taxRate?.let { product.taxRate = it }
+        updateProductDto.cessRate?.let { product.cessRate = it }
+        updateProductDto.customDuty?.let { product.customDuty = it }
+        updateProductDto.supplierName?.let { product.supplierName = it }
+        updateProductDto.supplierContact?.let { product.supplierContact = it }
+
         productRepository.save(product)
-        return Response("Product updated successfully", null)
+        return Response("Product updated successfully", product)
     }
 
-    fun deleteProduct(id: String):Response{
+    fun deleteProduct(id: String): Response {
+        if (!productRepository.existsById(id)) {
+            return Response("Product not found", null)
+        }
         productRepository.deleteById(id)
         return Response("Product deleted successfully", null)
     }
 
-    fun fetchProducts(page:Int, limit: Int):Response{
-        val products = productRepository.findAll(Pageable.ofSize(limit).withPage(page))
-        return Response("Products fetched successfully", products)
+    fun fetchProducts(fetchParams: FetchParams): Response {
+        val data = fetchData(productRepository,mongoTemplate, fetchParams, ProductEntity::class.java)
+        return Response("Products fetched successfully", data)
     }
 }

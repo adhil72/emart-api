@@ -17,12 +17,13 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
     @Bean
     fun securityFilterChain(http:HttpSecurity):SecurityFilterChain{
         http.csrf{it.disable()}.authorizeHttpRequests {
-            it
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority(Roles.ADMIN)
-                .requestMatchers("/products/**").hasAnyAuthority(Roles.ADMIN, Roles.MANAGER)
-                .anyRequest().denyAll()
+            rolesList.forEach { role->
+                if (role.value.contains("permitAll")) {
+                    it.requestMatchers(role.key).permitAll()
+                }else{
+                    it.requestMatchers(role.key).hasAnyAuthority(*role.value.toTypedArray())
+                }
+            }
         }.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }

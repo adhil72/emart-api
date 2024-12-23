@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception):ResponseEntity<Response>{
+        exception.printStackTrace()
         return ResponseEntity.status(503).body(Response(
             message = exception.message?:"Unexpected error occurred"
         ))
